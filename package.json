@@ -1,0 +1,23 @@
+{
+  "name": "hw-bamazon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BixbyRamone/hw-bamazon.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BixbyRamone/hw-bamazon/issues"
+  },
+  "homepage": "https://github.com/BixbyRamone/hw-bamazon#readme",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "inquirer": "^3.2.0"
+  }
+}
