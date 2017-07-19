@@ -42,7 +42,7 @@ inquirer.prompt([
 		console.log("==============");
 
 		connection.queryAsync("SELECT * FROM products")
-			.then( data => data.forEach( item => console.log(`${item.id}: ${item.product_name}: ${item.price}`) ) )
+			.then( data => data.forEach( item => console.log(`${item.id}: ${item.product_name}: \$${item.price}`) ) )
 				.then(() => connection.end() );
 
 		}
@@ -54,19 +54,20 @@ inquirer.prompt([
 		let quantityNum = 0;
 		let inventory;
 		let shoppingCart;
+		let itemCost = 0;
 
 		console.log("Available Items:");
 		console.log("==============");
 
 		connection.queryAsync("SELECT * FROM products")
-			.then( data => data.forEach( item => console.log(`${item.id}: ${item.product_name}: ${item.price}`) ) )
+			.then( data => data.forEach( item => console.log(`${item.id}: ${item.product_name}: \$${item.price}`) ) )
 				.then( () => 
 		// console.log("==============")
 
 		inquirer.prompt([
 			{
 			  name: 'choice',
-			  message: 'Enter the index number of the product that you wish to purchase: ',
+			  message: '\nEnter the index number of the product that you wish to purchase: ',
 			  type: 'input'
 
 			}
@@ -74,9 +75,10 @@ inquirer.prompt([
 	  		itemID = data.choice;
 	  		connection.queryAsync("SELECT * FROM bamazon.products WHERE id = ?", [data.choice])
 	  			.then( data => data.forEach( item => {
-	  				console.log(`${item.id}: ${item.product_name}: ${item.price}`) 
+	  				// console.log(`${item.id}: ${item.product_name}: ${item.price}`) 
 	  				inventory = item.stock_quantity;
 	  				shoppingCart = item.product_name;
+	  				itemCost = item.price;
 	  				}) )
 	  				.then( 
 	  						inquirer.prompt([
@@ -98,6 +100,8 @@ inquirer.prompt([
 						  			.then(() => connection.end() );
 						  			// .then( connection.queryAsync("SELECT * FROM bamazon.products WHERE id = ?", [data.choice])
 						  			console.log(`Thank you for your purchase of ${quantityNum} unit(s) of ${shoppingCart}(s)`)
+						  			let total = itemCost * quantityNum;
+						  			console.log("That will be a total of $" + total)
 
 						  			}
 						  	})
