@@ -43,13 +43,71 @@ inquirer.prompt([
 
 		connection.queryAsync("SELECT * FROM products")
 			.then( data => data.forEach( item => console.log(`${item.id}: ${item.product_name}: ${item.price}`) ) )
-			.then(() => connection.end() );
+				.then(() => connection.end() );
 
 		}
 
 
-	if (data.operation === purchase) {
-		
+	if (data.operation === 'purchase') {
+
+		let itemID = 0;
+		let quantityNum = 0;
+		let inventory;
+		let shoppingCart;
+
+		console.log("Available Items:");
+		console.log("==============");
+
+		connection.queryAsync("SELECT * FROM products")
+			.then( data => data.forEach( item => console.log(`${item.id}: ${item.product_name}: ${item.price}`) ) )
+				.then( () => 
+		// console.log("==============")
+
+		inquirer.prompt([
+			{
+			  name: 'choice',
+			  message: 'Enter the index number of the product that you wish to purchase: ',
+			  type: 'input'
+
+			}
+	  	]).then( (data) => {
+	  		itemID = data.choice;
+	  		connection.queryAsync("SELECT * FROM bamazon.products WHERE id = ?", [data.choice])
+	  			.then( data => data.forEach( item => {
+	  				console.log(`${item.id}: ${item.product_name}: ${item.price}`) 
+	  				inventory = item.stock_quantity;
+	  				shoppingCart = item.product_name;
+	  				}) )
+	  				.then( 
+	  						inquirer.prompt([
+								{
+								  name: 'amount',
+								  message: `How many units of ${shoppingCart}(s) do you wish to purchase? `,
+								  type: 'input'
+
+								}
+						  	]).then( (data) =>{
+						  		quantityNum = data.amount;
+						  		let newInv = inventory - quantityNum;
+						  			if (newInv < 0) {
+						  				console.log("Order cannot be processed. Insufficient stock on hand.")
+						  					connection.end() ;
+						  			} else {
+
+						  		connection.queryAsync("UPDATE bamazon.products SET stock_quantity = ? WHERE id = ?", [newInv, itemID])
+						  			.then(() => connection.end() );
+						  			// .then( connection.queryAsync("SELECT * FROM bamazon.products WHERE id = ?", [data.choice])
+						  			console.log(`Thank you for your purchase of ${quantityNum} unit(s) of ${shoppingCart}(s)`)
+
+						  			}
+						  	})
+	  					)
+
+
+
+
+	  	})
+		)
 	}
 
 	});
