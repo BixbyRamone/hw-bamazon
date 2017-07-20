@@ -55,6 +55,7 @@ inquirer.prompt([
 		let inventory;
 		let shoppingCart;
 		let itemCost = 0;
+		let salestoDate = 0;
 
 		console.log("Available Items:");
 		console.log("==============");
@@ -79,6 +80,7 @@ inquirer.prompt([
 	  				inventory = item.stock_quantity;
 	  				shoppingCart = item.product_name;
 	  				itemCost = item.price;
+	  				salestoDate = item.product_sales;
 	  				}) )
 	  				.then( 
 	  						inquirer.prompt([
@@ -91,16 +93,17 @@ inquirer.prompt([
 						  	]).then( (data) =>{
 						  		quantityNum = data.amount;
 						  		let newInv = inventory - quantityNum;
+						  		let total = itemCost * quantityNum;
+						  		salestoDate = salestoDate + total;
 						  			if (newInv < 0) {
 						  				console.log("Order cannot be processed. Insufficient stock on hand.")
 						  					connection.end() ;
 						  			} else {
 
-						  		connection.queryAsync("UPDATE bamazon.products SET stock_quantity = ? WHERE id = ?", [newInv, itemID])
-						  			.then(() => connection.end() );
+						  		connection.queryAsync("UPDATE bamazon.products SET stock_quantity = ?, product_sales = ? WHERE id = ?", [newInv, salestoDate, itemID])
+					  				.then(() => connection.end() );
 						  			// .then( connection.queryAsync("SELECT * FROM bamazon.products WHERE id = ?", [data.choice])
 						  			console.log(`Thank you for your purchase of ${quantityNum} unit(s) of ${shoppingCart}(s)`)
-						  			let total = itemCost * quantityNum;
 						  			console.log("That will be a total of $" + total)
 
 						  			}

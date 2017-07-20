@@ -50,7 +50,7 @@ inquirer.prompt([
 		console.log("==============");
 
 		connection.queryAsync("SELECT * FROM products")
-			.then( data => data.forEach( item => console.log(`ID#: ${item.id}.) Product Name: ${item.product_name}; Retail Price: \$${item.price}; In Stock: ${item.stock_quantity}`) ) )
+			.then( data => data.forEach( item => console.log(`ID#: ${item.id}.) Product Name: ${item.product_name}; Department: ${item.department_name}; Retail Price: \$${item.price}; In Stock: ${item.stock_quantity}`) ) )
 				.then(() => connection.end() );
 
 		}
@@ -107,5 +107,34 @@ inquirer.prompt([
 				  	)
 
 
+	}
+
+	if (data.operation === 'addProd') {
+
+		inquirer.prompt([
+			{
+			  name: 'name',
+			  message: 'Name of new product.',
+			  type: 'input'
+			},
+			{
+			  name: 'department',
+			  message: 'Department of new product.',
+			  type: 'input'
+			},
+			{
+			  name: 'price',
+			  message: 'Price of new product.',
+			  type: 'input'
+			},
+			{
+			  name: 'inventory',
+			  message: 'inventory of new product.',
+			  type: 'input'
+			}
+			]).then( (data) => {
+				connection.queryAsync(`INSERT INTO bamazon.products(product_name, department_name, price, stock_quantity) VALUES("${data.name}", "${data.department}", ${data.price}, ${data.inventory});`)
+					.then(() => connection.end() );
+			})
 	}
 });
