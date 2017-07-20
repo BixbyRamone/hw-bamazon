@@ -1,8 +1,8 @@
--- CREATE SCHEMA IF NOT EXISTS bamazon;
+CREATE SCHEMA IF NOT EXISTS bamazon;
 
 USE bamazon;
 
-CREATE TABLE IF NOT EXISTS departments(
+CREATE TABLE IF NOT EXISTS products(
 	id INTEGER AUTO_INCREMENT,
 	product_name VARCHAR(50),
     department_name VARCHAR(30),
