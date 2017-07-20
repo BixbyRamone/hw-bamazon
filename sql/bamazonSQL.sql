@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS departments(
 	id INTEGER AUTO_INCREMENT,
 	product_name VARCHAR(50),
     department_name VARCHAR(30),
-    price DECIMAL(11),
+    price DECIMAL(11,2),
     stock_quantity INTEGER(11),
     PRIMARY KEY(id)
 );
