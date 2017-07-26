@@ -100,7 +100,7 @@ inquirer.prompt([
 						  					connection.end() ;
 						  			} else {
 
-						  		connection.queryAsync("UPDATE bamazon.products SET stock_quantity = ?, product_sales = ? WHERE id = ?", [newInv, salestoDate, itemID])
+						  		connection.queryAsync("UPDATE bamazon.products SET stock_quantity = ? WHERE id = ?", [newInv, itemID])
 					  				.then(() => connection.end() );
 						  			// .then( connection.queryAsync("SELECT * FROM bamazon.products WHERE id = ?", [data.choice])
 						  			console.log(`Thank you for your purchase of ${quantityNum} unit(s) of ${shoppingCart}(s)`)

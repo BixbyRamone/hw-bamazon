@@ -133,7 +133,7 @@ inquirer.prompt([
 			  type: 'input'
 			}
 			]).then( (data) => {
-				connection.queryAsync(`INSERT INTO bamazon.products(product_name, department_name, price, stock_quantity) VALUES("${data.name}", "${data.department}", ${data.price}, ${data.inventory});`)
+				connection.queryAsync("INSERT INTO bamazon.products(product_name, department_name, price, stock_quantity) VALUES(?, ?, ?, ?);", [data.name, data.department, data.price, data.inventory])
 					.then(() => connection.end() );
 			})
 	}
